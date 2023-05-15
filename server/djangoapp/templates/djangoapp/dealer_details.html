@@ -1,18 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Dealership Review</title>
     {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-</head>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <script> console.log("Context:", reviews)</script>
+  </head>
 
-    <body>
-
+  <body>
     <!--Add a nav bar here -->
+    <div class="container">
+        <h2>Review for dealership</h2>
+      <div class="card-columns">
+        {% for review in reviews %}
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
 
-    <!-- Add reviews as cards -->
-
-    </body>
-
+                <h5 class="card-title">{{review.car_make}} - {{review.car_model}}</h5>
+                <div><span style='font-size:50px;'>&#128515;</span></div>
+            </div>
+            <h6>{{review.car_year}}</h6>
+            <h6>{{review.name}}</h6>
+            <div>
+                {{review.review}}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
 </html>

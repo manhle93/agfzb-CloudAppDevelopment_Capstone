@@ -10,9 +10,17 @@ from requests.auth import HTTPBasicAuth
 def get_request(url, **kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
+    api_key = kwargs.get('api_key', None)
     try:
-        # Call get method of requests library with URL and parameters
-        response = requests.get(url, headers={'Content-Type': 'application/json'},
+        if api_key:
+            params = dict()
+            params["text"] = kwargs["text"]
+            params["version"] = kwargs["version"]
+            params["features"] = kwargs["features"]
+            params["return_analyzed_text"] = kwargs["return_analyzed_text"]
+            response = requests.get(url, headers={'Content-Type': 'application/json'}, params=params, auth=HTTPBasicAuth('apikey', api_key))
+        else:
+            response = requests.get(url, headers={'Content-Type': 'application/json'},
                                     params=kwargs)
     except:
         # If any error occurs
@@ -25,7 +33,9 @@ def get_request(url, **kwargs):
 
 # Create a `post_request` to make HTTP POST requests
 # e.g., response = requests.post(url, params=kwargs, json=payload)
-
+def post_request(url,json_payload, **kwargs):
+    response = requests.post(url, params=kwargs, json=json_payload)
+    return response
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -45,8 +55,8 @@ def get_dealers_from_cf(url, **kwargs):
             # Create a CarDealer object with values in `doc` object
             dealer_obj = CarDealer(address=dealer_doc["address"], city=dealer_doc["city"], full_name=dealer_doc["full_name"],
                                    id=dealer_doc["id"], lat=dealer_doc["lat"], long=dealer_doc["long"],
-                                   short_name=dealer_doc["short_name"],
-                                   st=dealer_doc["st"], zip=dealer_doc["zip"])
+                                   short_name=dealer_doc["short_name"], state=dealer_doc['state'] if "state" in dealer_doc else '' ,
+                                   zip=dealer_doc["zip"])
             results.append(dealer_obj)
 
     return results
@@ -57,15 +67,10 @@ def get_dealers_from_cf(url, **kwargs):
 # - Parse JSON results into a DealerView object list
 def get_dealer_reviews_from_cf(url, dealer_id):
     results = []
-    # Call get_request with a URL parameter
     json_result = get_request(url,  dealer_id=dealer_id)
     if json_result:
-        # Get the row list in JSON as dealers
-        dealers = json_result
-        # For each dealer object
-        for dealer in dealers:
-            # Get its content in `doc` object
-            # Create a CarDealer object with values in `doc` object
+        reviews = json_result
+        for dealer in reviews:
             dealer_obj = DealerReview(
                 dealership=dealer["dealership"] if "dealership" in dealer else '',
                 name=dealer["name"] if "name" in dealer else '', 
@@ -83,6 +88,7 @@ def get_dealer_reviews_from_cf(url, dealer_id):
     return results
 
 # Create an `analyze_review_sentiments` method to call Watson NLU and analyze text
+
 # def analyze_review_sentiments(text):
 # - Call get_request() with specified arguments
 # - Get the returned sentiment label such as Positive or Negative

@@ -41,7 +41,11 @@
         </li>
         {% else %}
         <li>
-          <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+          <form
+            class="form-inline"
+            action="{% url 'djangoapp:login' %}"
+            method="post"
+          >
             {% csrf_token %}
             <div class="input-group">
               <input
@@ -64,11 +68,40 @@
         {% endif %}
       </ul>
     </nav>
+    <div class="container">
+      <br/>
+      <h2>Dealership list</h2>
+      <br/>
+      <table class="table" id="table" data-filter-control="true">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Dealer Name</th>
+            <th scope="col">City</th>
+            <th scope="col">Address</th>
+            <th scope="col">Zip</th>
+            <th scope="col" data-field="state" data-filter-control="select">State</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for dealer in dealership_list %}
+          <tr>
+            <td>{{dealer.id}}</td>
+            <td>{{dealer.full_name}}</td>
+            <td>{{dealer.city}}</td>
+            <td>{{dealer.address}}</td>
+            <td>{{dealer.zip}}</td>
+            <td>{{dealer.state}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-    <!-- Remove this line the first time you edit this file -->
-    This is the index page of your Django app!
-    <!--Add a nav bar here -->
-
-    <!--Add a dealer table here -->
+    <script>
+      $(function() {
+        $('#table').bootstrapTable()
+      })
+    </script>
   </body>
 </html>
