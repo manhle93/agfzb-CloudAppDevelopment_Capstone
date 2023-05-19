@@ -11,6 +11,35 @@
 
 </head>
     <body>
-    <!--Add review form here -->
+        <div class="container">
+        <h2>Add review about Car dealership</h2>
+        <form>
+            <label>Enter the review content</label>
+            <textarea class="form-control" id="content" name="content" rows="2" required></textarea>
+            <br/>
+            <div>
+                <input type="checkbox"name="purchasecheck" id="purchasecheck"/>
+                <label class="form-check-label" for="defaultCheck1">
+                    Default checkbox
+                </label>
+            </div>
+
+            <br/>
+            <label>Select your car</label>
+            <select name="car" id="car" class="form-select" required>
+                <option selected value=2>Firebird-Pontiac-1995</option>
+                <option selected value=2>Car-Audi-2021</option>
+            </select><br/>
+            <label>Select your purchase date</label>
+            <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate"/>
+            <br/>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+        <script type="text/javascript">
+            $('.date-own').datepicker({
+               format: 'mm/dd/yyyy'
+             });
+       </script>
     </body>
 </html>
